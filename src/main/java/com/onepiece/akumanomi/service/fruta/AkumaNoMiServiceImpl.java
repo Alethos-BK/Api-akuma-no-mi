@@ -45,7 +45,7 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
 
         List<AkumaNoMiDto> frutas = new ArrayList<>();
 
-        var todasAsFrutas = obterTodos();
+        List<AkumaNoMiDto> todasAsFrutas = obterTodos();
 
         for (AkumaNoMiDto fruta : todasAsFrutas) {
             if(fruta.getCategoria().getId() == idCategoria){

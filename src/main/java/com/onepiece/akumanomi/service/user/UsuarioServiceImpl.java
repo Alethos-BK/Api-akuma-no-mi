@@ -56,7 +56,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public LoginResponse logar(String usuario, String senha) throws Exception{
 
-        var user = _userRepository.findByUsuario(usuario);
+        Optional<Usuario> user = _userRepository.findByUsuario(usuario);
 
         if(user.get().getSenha().equals(senha)){
             return new LoginResponse(user.get());
