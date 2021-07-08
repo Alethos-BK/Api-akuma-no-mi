@@ -69,8 +69,8 @@ public class AkumaNoMiController {
         return new ResponseEntity<>(cadastrarFruta, HttpStatus.CREATED);
     }
 
-    @PutMapping(value="{id}")
-    public ResponseEntity<AkumaNoMiDto> atualizarCategoria(@PathVariable Long id, @RequestBody AkumaNoMi user, String categ){
+    @PutMapping(value="{id}/categoria/{categ}")
+    public ResponseEntity<AkumaNoMiDto> atualizarCategoria(@PathVariable Long id, @RequestBody AkumaNoMi user, Long categ){
          ModelMapper mapper = new ModelMapper();
             
         AkumaNoMiDto atualizarCateg = mapper.map(user, AkumaNoMiDto.class);

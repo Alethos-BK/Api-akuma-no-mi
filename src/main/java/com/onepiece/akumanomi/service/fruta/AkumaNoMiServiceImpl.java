@@ -64,6 +64,8 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
         if(categ.isPresent()) {
            
             fruta.setCategoriaId(categ.get());
+            fruta.getCategoria().setTipo(categ.get().getTipo());
+            fruta.getCategoria().setDescricao(categ.get().getDescricao());
             
         } else {
             throw new Exception("Categoria inexistente");
@@ -73,11 +75,11 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
     }
 
     @Override
-    public AkumaNoMiDto atualizarAkumaNoMi(Long id, AkumaNoMiDto fruta, String nomeCategoria){
+    public AkumaNoMiDto atualizarAkumaNoMi(Long id, AkumaNoMiDto fruta, Long idCategoria) {
         
         fruta.setId(id);
 
-        Optional<Categoria> categoria = _categoriaRepository.findByTipo(nomeCategoria);
+        Optional<Categoria> categoria = _categoriaRepository.findById(idCategoria);
 
         if(categoria.isPresent()){
 			fruta.setCategoriaId(categoria.get());

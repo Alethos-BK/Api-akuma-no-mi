@@ -11,7 +11,7 @@ public interface AkumaNoMiService {
     Optional<AkumaNoMiDto> obterPorNome(String nome);
     List<AkumaNoMiDto> obterPorCategoria(Long idCategoria);
     AkumaNoMiDto cadastrarAkumaNoMi(AkumaNoMiDto fruta, Long categoria) throws Exception;
-    AkumaNoMiDto atualizarAkumaNoMi(Long id, AkumaNoMiDto fruta, String nomeCategoria);
+    AkumaNoMiDto atualizarAkumaNoMi(Long id, AkumaNoMiDto fruta, Long idCategoria);
     void removerAkumaNoMi(Long id);
     
 
