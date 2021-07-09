@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -30,17 +31,23 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "/api/fruta")
 public class AkumaNoMiController {
     
-    @Autowired AkumaNoMiService _frutaService;
+    @Autowired 
+    AkumaNoMiService _frutaService;
+
+    
 
     @ApiOperation("Retorna todas as Akumas no Mi")
     @GetMapping
-    public ResponseEntity<List<AkumaNoMiDto>> obterTodos(){
+    public ResponseEntity<List<AkumaNoMi>> obterTodos(
+        @RequestParam(required = false) Integer pagina,
+		@RequestParam(required = false) Integer qtdRegistros
+    ){
         
-        if(_frutaService.obterTodos().isEmpty()){
+        if(_frutaService.obterTodos(pagina, qtdRegistros).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(_frutaService.obterTodos(), HttpStatus.OK);
+        return new ResponseEntity<>(_frutaService.obterTodos(pagina, qtdRegistros), HttpStatus.OK);
     }
 
     @ApiOperation("Retorna Akumas no Mi por nome")
@@ -61,13 +68,16 @@ public class AkumaNoMiController {
 
     @ApiOperation("Retorna Akumas no Mi por tipo")
     @GetMapping("categoria/{tipo}")
-    public ResponseEntity<List<AkumaNoMiDto>> obterporCategoria(@PathVariable Long tipo){
+    public ResponseEntity<List<AkumaNoMi>> obterporCategoria(
+        @PathVariable Long tipo,
+        @RequestParam(required = false) Integer pagina,
+		@RequestParam(required = false) Integer qtdRegistros){
 
-        if(_frutaService.obterPorCategoria(tipo).isEmpty()){
+        if(_frutaService.obterPorCategoria(tipo, pagina, qtdRegistros).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(_frutaService.obterPorCategoria(tipo), HttpStatus.OK);
+        return new ResponseEntity<>(_frutaService.obterPorCategoria(tipo, pagina, qtdRegistros), HttpStatus.OK);
     }
 
     @ApiOperation("Adiciona uma nova Akuma no Mi")

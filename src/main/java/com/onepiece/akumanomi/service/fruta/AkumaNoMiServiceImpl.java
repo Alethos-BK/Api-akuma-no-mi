@@ -15,7 +15,10 @@ import com.onepiece.akumanomi.shared.CategoriaDto;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 @Service
 public class AkumaNoMiServiceImpl implements AkumaNoMiService{
@@ -25,10 +28,14 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
     @Autowired CategoriaRepository _categoriaRepository;
 
     @Override
-    public List<AkumaNoMiDto> obterTodos(){
-        List<AkumaNoMi> frutas = _akumaRepository.findAll();
+    public List<AkumaNoMi> obterTodos(Integer pagina, Integer qtdRegistros){
 
-        return frutas.stream().map(categoria -> new ModelMapper().map(categoria, AkumaNoMiDto.class)).collect(Collectors.toList());
+        Pageable page = null;
+
+        page = PageRequest.of(pagina, qtdRegistros);
+        List<AkumaNoMi> frutas = _akumaRepository.findAll(page).getContent();
+
+        return frutas;
     }
 
     @Override
@@ -42,13 +49,13 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
     }
 
     @Override
-    public List<AkumaNoMiDto> obterPorCategoria(Long idCategoria){
+    public List<AkumaNoMi> obterPorCategoria(Long idCategoria, Integer pagina, Integer qtdRegistros){
 
-        List<AkumaNoMiDto> frutas = new ArrayList<>();
+        List<AkumaNoMi> frutas = new ArrayList<>();
 
-        List<AkumaNoMiDto> todasAsFrutas = obterTodos();
+        List<AkumaNoMi> todasAsFrutas = obterTodos(pagina, qtdRegistros);
 
-        for (AkumaNoMiDto fruta : todasAsFrutas) {
+        for (AkumaNoMi fruta : todasAsFrutas) {
             if(fruta.getCategoria().getId() == idCategoria){
                 frutas.add(fruta);
             }
@@ -96,8 +103,8 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
         AkumaNoMi frutaEntity = mapper.map(fruta, AkumaNoMi.class);      
         // CategoriaDto categEntity = mapper.map(categoria, CategoriaDto.class);
         frutaEntity.setCategoriaId(categoria);
-        // frutaEntity.getCategoria().setTipo(categoria.getTipo());
-        // frutaEntity.getCategoria().setDescricao(categoria.getDescricao());
+        frutaEntity.getCategoria().setTipo(categoria.getTipo());
+        frutaEntity.getCategoria().setDescricao(categoria.getDescricao());
         frutaEntity = _akumaRepository.save(frutaEntity);
 
 
