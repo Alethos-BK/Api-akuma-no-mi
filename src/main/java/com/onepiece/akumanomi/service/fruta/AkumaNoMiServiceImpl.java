@@ -11,6 +11,7 @@ import com.onepiece.akumanomi.model.fruta.Categoria;
 import com.onepiece.akumanomi.repository.AkumaNoMiRepository;
 import com.onepiece.akumanomi.repository.CategoriaRepository;
 import com.onepiece.akumanomi.shared.AkumaNoMiDto;
+import com.onepiece.akumanomi.shared.CategoriaDto;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,37 +58,31 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
     }
 
     @Override
-    public AkumaNoMiDto cadastrarAkumaNoMi(AkumaNoMiDto fruta, Long categoria) throws Exception{
+    public AkumaNoMi cadastrarAkumaNoMi(AkumaNoMiDto fruta, Long categoria) throws Exception{
         
         Optional<Categoria> categ = _categoriaRepository.findById(categoria);
-
-        if(categ.isPresent()) {
-           
-            fruta.setCategoriaId(categ.get());
-            fruta.getCategoria().setTipo(categ.get().getTipo());
-            fruta.getCategoria().setDescricao(categ.get().getDescricao());
+     
+        if(categ.isPresent()){    
+            return salvarAkumaNoMi(fruta, categ.get());
+        } 
+        else{
+           throw new Exception("Categoria inexistente");
             
-        } else {
-            throw new Exception("Categoria inexistente");
         }
-      
-        return salvarAkumaNoMi(fruta);
     }
 
     @Override
-    public AkumaNoMiDto atualizarAkumaNoMi(Long id, AkumaNoMiDto fruta, Long idCategoria) {
+    public AkumaNoMi atualizarAkumaNoMi(Long id, AkumaNoMiDto fruta) throws Exception {
         
         fruta.setId(id);
 
-        Optional<Categoria> categoria = _categoriaRepository.findById(idCategoria);
+        // Optional<Categoria> categoria = _categoriaRepository.findById(idCategoria);
 
-        if(categoria.isPresent()){
-			fruta.setCategoriaId(categoria.get());
-		} else {
-			return null;
-		}
+        ModelMapper mapper = new ModelMapper();
+        AkumaNoMi frutaEntity = mapper.map(fruta, AkumaNoMi.class);
 
-        return salvarAkumaNoMi(fruta);
+        return mapper.map(frutaEntity, AkumaNoMi.class);
+
     }
 
     @Override
@@ -96,12 +91,17 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
     }
 
 
-    private AkumaNoMiDto salvarAkumaNoMi(AkumaNoMiDto fruta) {
+    private AkumaNoMi salvarAkumaNoMi(AkumaNoMiDto fruta, Categoria categoria) {
         ModelMapper mapper = new ModelMapper();
-        AkumaNoMi frutaEntity = mapper.map(fruta, AkumaNoMi.class);
+        AkumaNoMi frutaEntity = mapper.map(fruta, AkumaNoMi.class);      
+        // CategoriaDto categEntity = mapper.map(categoria, CategoriaDto.class);
+        frutaEntity.setCategoriaId(categoria);
+        // frutaEntity.getCategoria().setTipo(categoria.getTipo());
+        // frutaEntity.getCategoria().setDescricao(categoria.getDescricao());
         frutaEntity = _akumaRepository.save(frutaEntity);
 
-        return mapper.map(frutaEntity, AkumaNoMiDto.class);
+
+        return mapper.map(frutaEntity, AkumaNoMi.class);
     }
 
 }
