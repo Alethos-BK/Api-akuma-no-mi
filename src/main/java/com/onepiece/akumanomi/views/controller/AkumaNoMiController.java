@@ -40,7 +40,7 @@ public class AkumaNoMiController {
     @GetMapping
     public ResponseEntity<List<AkumaNoMi>> obterTodos(
         @RequestParam(required = false) Integer pagina,
-		@RequestParam(required = false) Integer qtdRegistros
+	    @RequestParam(required = false) Integer qtdRegistros
     ){
         
         if(_frutaService.obterTodos(pagina, qtdRegistros).isEmpty()){
@@ -51,19 +51,17 @@ public class AkumaNoMiController {
     }
 
     @ApiOperation("Retorna Akumas no Mi por nome")
-    @GetMapping("/{nome}")
-    public ResponseEntity<AkumaNoMiDto> obterPorNome(@PathVariable String nome){
+    @GetMapping("nome/{nome}")
+    public ResponseEntity<List<AkumaNoMi>> obterPorNome(@PathVariable(value= "nome") String nome) throws Exception{
 
-        Optional<AkumaNoMiDto> categoria = _frutaService.obterPorNome(nome);
+        List<AkumaNoMi> categoria = _frutaService.obterPorNome(nome);
     
-        if(categoria.isPresent()){
-            return new ResponseEntity<>(
-                new ModelMapper().map(categoria.get(), AkumaNoMiDto.class),
-                HttpStatus.OK
-            );
-        }
+        if(categoria.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            
+        };
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(categoria, HttpStatus.OK);
     }
 
     @ApiOperation("Retorna Akumas no Mi por tipo")
@@ -71,7 +69,8 @@ public class AkumaNoMiController {
     public ResponseEntity<List<AkumaNoMi>> obterporCategoria(
         @PathVariable Long tipo,
         @RequestParam(required = false) Integer pagina,
-		@RequestParam(required = false) Integer qtdRegistros){
+		@RequestParam(required = false) Integer qtdRegistros)
+    {
 
         if(_frutaService.obterPorCategoria(tipo, pagina, qtdRegistros).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
