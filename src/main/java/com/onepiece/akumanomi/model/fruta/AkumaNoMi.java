@@ -1,5 +1,6 @@
 package com.onepiece.akumanomi.model.fruta;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,6 +14,7 @@ public class AkumaNoMi {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
 
     private String descricao;
@@ -26,6 +28,30 @@ public class AkumaNoMi {
     @ManyToOne()
 	@JoinColumn(name = "categoriaId")
 	private Categoria categoria;
+
+    public AkumaNoMi() {
+    }
+
+    public AkumaNoMi(String nome, String descricao, String imagemFruta, String imagemUsuario, Double preco,
+            Categoria categoria) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.imagemFruta = imagemFruta;
+        this.imagemUsuario = imagemUsuario;
+        this.preco = preco;
+        this.categoria = categoria;
+    }
+
+    public AkumaNoMi(Long id, String nome, String descricao, String imagemFruta, String imagemUsuario, Double preco,
+            Categoria categoria) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.imagemFruta = imagemFruta;
+        this.imagemUsuario = imagemUsuario;
+        this.preco = preco;
+        this.categoria = categoria;
+    }
 
     public Long getId() {
         return id;

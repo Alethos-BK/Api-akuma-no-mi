@@ -39,13 +39,11 @@ public class AkumaNoMiServiceImpl implements AkumaNoMiService{
     }
 
     @Override
-    public Optional<AkumaNoMiDto> obterPorNome(String nome){
-        Optional<AkumaNoMi> nomesAkumas = _akumaRepository.findByNome(nome);
+    public List<AkumaNoMi> obterPorNome(String nome){
+        List<AkumaNoMi> nomesAkumas = _akumaRepository.findByNomeContainingIgnoreCase(nome);
 
-        if(nomesAkumas.isPresent()){
-            return Optional.of(new ModelMapper().map(nomesAkumas.get(), AkumaNoMiDto.class));
-        }
-        return Optional.empty();
+        return nomesAkumas;
+
     }
 
     @Override
