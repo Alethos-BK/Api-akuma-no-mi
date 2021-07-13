@@ -13,5 +13,5 @@ public interface UsuarioService {
     UsuarioDto cadastarUsuario(UsuarioDto usuario);
     UsuarioDto atualizaUsuario(Long id, UsuarioDto usuario);
     void removerUsuaro(Long id);
-    LoginResponse logar(String usuario, String senha) throws Exception;
+    LoginResponse logar(String usuario, String senha);
 }
